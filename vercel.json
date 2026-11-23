@@ -4,40 +4,40 @@
   "cleanUrls": true,
   "routes": [
     {
-      "src": "/widget/(.*)",
-      "dest": "/storefront-widget/$1"
-    },
-    {
-      "src": "/widget",
-      "dest": "/storefront-widget/index.html"
-    },
-    {
-      "src": "/assets/(.*)",
-      "dest": "/storefront-widget/$1"
-    },
-    {
       "src": "/admin/(.*)",
-      "dest": "/admin-dashboard/$1"
+      "dest": "/frontend/admin-dashboard/$1"
     },
     {
       "src": "/admin",
-      "dest": "/admin-dashboard/index.html"
+      "dest": "/frontend/admin-dashboard/index.html"
+    },
+    {
+      "src": "/widget/(.*)",
+      "dest": "/frontend/storefront-widget/$1"
+    },
+    {
+      "src": "/widget",
+      "dest": "/frontend/storefront-widget/index.html"
+    },
+    {
+      "src": "/assets/(.*)",
+      "dest": "/frontend/assets/$1"
     },
     {
       "src": "/js/(.*)",
-      "dest": "/admin-dashboard/js/$1"
+      "dest": "/frontend/admin-dashboard/js/$1"
     },
     {
       "src": "/css/(.*)",
-      "dest": "/admin-dashboard/css/$1"
+      "dest": "/frontend/admin-dashboard/css/$1"
     },
     {
       "src": "/screenshots/(.*)",
-      "dest": "/admin-dashboard/screenshots/$1"
+      "dest": "/frontend/admin-dashboard/screenshots/$1"
     },
     {
       "src": "/",
-      "dest": "/admin-dashboard/index.html"
+      "dest": "/frontend/index.html"
     }
   ]
 }

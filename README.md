@@ -1,29 +1,52 @@
 # Abihacart AI Customer Support Chatbot
 
-Production-ready AI customer-support chatbot system for [Abihacart](https://abihacart.myshopify.com/) (UAE).
+Production-ready enterprise AI customer-support concierge and administration cockpit for [Abihacart](https://abihacart.myshopify.com/) (UAE).
 
-## Architecture Overview
-
-- **Backend:** Node.js, Express.js, MongoDB (Mongoose), Winston logger, Helmet, CORS, Rate Limiting.
-- **AI Engine:** OpenAI API with Tool/Function Calling.
-- **Shopify Integration:** GraphQL Admin API (2025-01 / 2024-10) with verified webhook HMAC authentication.
-- **Storefront Integration:** Shopify Online Store 2.0 Theme App Extension (App Embed Block) using vanilla HTML/CSS/JS.
-- **Human Escalation:** Meta WhatsApp Business Cloud API.
-- **Admin Dashboard:** Secure administrative console for conversation tracking, ticket escalations, and verified knowledge base management.
-
-## Project Structure
+## Architecture & Directory Structure
 
 ```text
-├── backend/            # Express.js REST API & webhook ingress
-├── storefront-widget/  # Vanilla JS & CSS chat widget component
-├── shopify-app/        # Shopify App & Theme App Extensions (App Embed)
-├── admin-dashboard/    # Administrative cockpit & ticket manager
-└── docs/               # Technical documentation & guides
+abihacart-chatbot/
+│
+├── frontend/                     # Dedicated Frontend (Deployed on Vercel)
+│   ├── admin-dashboard/          # Administrative management cockpit
+│   ├── storefront-widget/        # Customer-facing luxury concierge chat
+│   ├── assets/                   # Shared frontend CSS/JS assets
+│   ├── index.html                # Main frontend landing portal
+│   └── vercel.json               # Vercel routing & cleanUrls configuration
+│
+├── backend/                      # Dedicated Backend (Deployed on Render)
+│   ├── src/                      # Controllers, models, routes, services, middleware, config, utils
+│   ├── tests/                    # Comprehensive regression test suite
+│   ├── server.js                 # Server entry point
+│   ├── package.json              # Backend dependencies and scripts
+│   └── .env.example              # Environment variable template (no secrets)
+│
+├── extensions/                   # Shopify Online Store 2.0 Theme App Extension
+│   └── abihacart-chat-embed/     # App Embed Block with zero theme file modification
+│
+├── shopify.app.toml              # Shopify CLI 3.x App Configuration
+├── render.yaml                   # Render Blueprint Specification
+├── vercel.json                   # Root Vercel fallback configuration
+└── .gitignore                    # Environment & credential protection
 ```
 
-## Security & Privacy Guidelines
+## Deployment Specifications
 
-- Never commit `.env` or sensitive credentials to Git.
+### Frontend (Vercel)
+- **Framework Preset:** `Other` (Vanilla HTML/CSS/JS)
+- **Root Directory:** `frontend`
+- **Build Command:** *(leave empty)*
+- **Output Directory:** `.`
+
+### Backend (Render)
+- **Runtime:** `Node`
+- **Root Directory:** `backend`
+- **Build Command:** `npm install`
+- **Start Command:** `node server.js`
+- **Health Check Path:** `/api/health`
+- **MongoDB Atlas:** Mandatory live connection in production (`NODE_ENV=production`)
+
+## Security & Protection
+- Never commit `.env` or secrets to Git.
 - Client secrets, access tokens, and API keys are strictly server-side.
-- Zero customer PII or address disclosure without 2-factor order verification.
-- English-only support for UAE ecommerce market.
+- Zero customer PII disclosure without dual-factor order verification.

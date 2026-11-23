@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Abihacart AI Customer Support Platform</title>
+  <link rel="stylesheet" href="assets/widget.css">
+  <style>
+    :root {
+      --brand-dark: #141414;
+      --brand-cream: #faf8f5;
+      --brand-gold: #b89a63;
+      --brand-gold-hover: #c9ad78;
+      --brand-border: #e8e5df;
+      --text-muted: #666666;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: var(--brand-cream);
+      color: var(--brand-dark);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .top-bar {
+      background: var(--brand-dark);
+      color: var(--brand-cream);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-align: center;
+      padding: 9px 16px;
+      border-bottom: 1px solid rgba(184, 154, 99, 0.3);
+    }
+    .top-bar span {
+      color: var(--brand-gold);
+      font-weight: 600;
+    }
+    .header {
+      background: #ffffff;
+      border-bottom: 1px solid var(--brand-border);
+      padding: 20px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--brand-dark);
+    }
+    .brand-logo {
+      width: 36px;
+      height: 36px;
+      background: var(--brand-dark);
+      color: var(--brand-gold);
+      font-weight: 700;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      letter-spacing: 0.05em;
+    }
+    .brand-text h1 {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+    .brand-text p {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .main-content {
+      flex: 1;
+      max-width: 1100px;
+      margin: 48px auto;
+      padding: 0 24px;
+      width: 100%;
+    }
+    .hero {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(184, 154, 99, 0.15);
+      color: #8b6e36;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .hero h2 {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--brand-dark);
+      margin-bottom: 12px;
+      letter-spacing: -0.02em;
+    }
+    .hero p {
+      font-size: 16px;
+      color: var(--text-muted);
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .portal-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+    .portal-card {
+      background: #ffffff;
+      border: 1px solid var(--brand-border);
+      border-radius: 12px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    .portal-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+      border-color: var(--brand-gold);
+    }
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      background: rgba(184, 154, 99, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--brand-gold);
+      margin-bottom: 20px;
+    }
+    .card-icon svg {
+      width: 24px;
+      height: 24px;
+    }
+    .card-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--brand-dark);
+    }
+    .card-description {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+    .card-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--brand-dark);
+      color: var(--brand-cream);
+      text-decoration: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      transition: background 0.2s ease;
+    }
+    .card-btn:hover {
+      background: #2a2a2a;
+    }
+    .card-btn.gold {
+      background: var(--brand-gold);
+      color: #ffffff;
+    }
+    .card-btn.gold:hover {
+      background: var(--brand-gold-hover);
+    }
+    .system-status {
+      background: #ffffff;
+      border: 1px solid var(--brand-border);
+      border-radius: 12px;
+      padding: 24px 32px;
+    }
+    .system-status h3 {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--brand-gold);
+      margin-bottom: 16px;
+      font-weight: 700;
+    }
+    .status-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      list-style: none;
+    }
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #333333;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+    }
+    .footer {
+      background: var(--brand-dark);
+      color: #888888;
+      text-align: center;
+      padding: 24px;
+      font-size: 13px;
+      border-top: 1px solid rgba(184, 154, 99, 0.2);
+    }
+    .footer a {
+      color: var(--brand-gold);
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    Official Enterprise Platform • <span>Abihacart Store Support</span>
+  </div>
+
+  <header class="header">
+    <a href="/" class="brand">
+      <div class="brand-logo">A</div>
+      <div class="brand-text">
+        <h1>Abihacart Support</h1>
+        <p>AI Concierge & Operations Management</p>
+      </div>
+    </a>
+  </header>
+
+  <main class="main-content">
+    <section class="hero">
+      <span class="hero-badge">Production Deployment</span>
+      <h2>Enterprise AI Support & Store Operations</h2>
+      <p>Intelligent, 24/7 customer concierge and administrative management system integrated with Shopify Online Store 2.0.</p>
+    </section>
+
+    <div class="portal-grid">
+      <!-- Admin Cockpit -->
+      <article class="portal-card">
+        <div>
+          <div class="card-icon">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+            </svg>
+          </div>
+          <h3 class="card-title">Admin Support Cockpit</h3>
+          <p class="card-description">
+            Real-time conversation monitoring, WhatsApp escalation queues, SMS draft order approvals, knowledge base management, and support analytics.
+          </p>
+        </div>
+        <a href="/admin" class="card-btn">
+          Access Admin Dashboard →
+        </a>
+      </article>
+
+      <!-- Storefront Concierge Widget Preview -->
+      <article class="portal-card">
+        <div>
+          <div class="card-icon">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+            </svg>
+          </div>
+          <h3 class="card-title">Storefront Concierge Widget</h3>
+          <p class="card-description">
+            Interactive luxury chat concierge preview. Provides UAE delivery answers, catalog search, order tracking, and SMS-verified checkout.
+          </p>
+        </div>
+        <a href="/widget" class="card-btn gold">
+          Launch Concierge Widget →
+        </a>
+      </article>
+    </div>
+
+    <section class="system-status">
+      <h3>System Architecture & Connected Services</h3>
+      <ul class="status-list">
+        <li class="status-item"><span class="status-dot"></span> Shopify GraphQL API 2026-10</li>
+        <li class="status-item"><span class="status-dot"></span> OpenAI GPT Engine</li>
+        <li class="status-item"><span class="status-dot"></span> MongoDB Atlas Production</li>
+        <li class="status-item"><span class="status-dot"></span> Twilio SMS Gateway</li>
+        <li class="status-item"><span class="status-dot"></span> WhatsApp Cloud API</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="footer">
+    &copy; 2026 Abihacart UAE. All rights reserved. • Connected to <a href="https://abihacart.myshopify.com/" target="_blank" rel="noopener">abihacart.myshopify.com</a>
+  </footer>
+</body>
+</html>
