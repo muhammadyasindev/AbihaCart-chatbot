@@ -1,0 +1,43 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "version": 2,
+  "cleanUrls": true,
+  "routes": [
+    {
+      "src": "/widget/(.*)",
+      "dest": "/storefront-widget/$1"
+    },
+    {
+      "src": "/widget",
+      "dest": "/storefront-widget/index.html"
+    },
+    {
+      "src": "/assets/(.*)",
+      "dest": "/storefront-widget/$1"
+    },
+    {
+      "src": "/admin/(.*)",
+      "dest": "/admin-dashboard/$1"
+    },
+    {
+      "src": "/admin",
+      "dest": "/admin-dashboard/index.html"
+    },
+    {
+      "src": "/js/(.*)",
+      "dest": "/admin-dashboard/js/$1"
+    },
+    {
+      "src": "/css/(.*)",
+      "dest": "/admin-dashboard/css/$1"
+    },
+    {
+      "src": "/screenshots/(.*)",
+      "dest": "/admin-dashboard/screenshots/$1"
+    },
+    {
+      "src": "/",
+      "dest": "/admin-dashboard/index.html"
+    }
+  ]
+}

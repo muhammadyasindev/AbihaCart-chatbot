@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Abihacart AI Support Cockpit - Admin Dashboard</title>
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+  <!-- =========================================================================
+       1. Authentication View (Login Form)
+       ========================================================================= -->
+  <div id="auth-view" class="auth-wrapper">
+    <div class="auth-card">
+      <div class="auth-brand">
+        <h2>Abihacart Support Cockpit</h2>
+        <p>Enterprise AI & WhatsApp Support Management</p>
+      </div>
+
+      <div id="auth-alert" class="alert alert-danger" style="display: none;"></div>
+
+      <form id="login-form">
+        <div class="form-group">
+          <label class="form-label" for="login-username">Username or Email</label>
+          <input type="text" id="login-username" class="form-input" placeholder="admin or email@abihacart.com" required autocomplete="username">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="login-password">Password</label>
+          <input type="password" id="login-password" class="form-input" placeholder="••••••••••••" required autocomplete="current-password">
+        </div>
+
+        <button type="submit" id="login-btn" class="btn btn-primary btn-block">
+          <span id="login-btn-text">Sign In to Cockpit</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       2. Dashboard Shell (Sidebar + Topbar + Views)
+       ========================================================================= -->
+  <div id="dashboard-shell" class="app-container" style="display: none;">
+    
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">A</div>
+        <div class="sidebar-title">
+          <h1>Abihacart AI</h1>
+          <span>Support Cockpit</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">Support Operations</div>
+        <a class="nav-item active" data-view="overview" id="nav-overview">
+          <span class="nav-icon">📊</span>
+          <span>Overview</span>
+        </a>
+        <a class="nav-item" data-view="conversations" id="nav-conversations">
+          <span class="nav-icon">💬</span>
+          <span>Conversations</span>
+          <span class="nav-badge" id="badge-conv-count">0</span>
+        </a>
+        <a class="nav-item" data-view="tickets" id="nav-tickets">
+          <span class="nav-icon">📱</span>
+          <span>WhatsApp Tickets</span>
+          <span class="nav-badge" id="badge-ticket-count">0</span>
+        </a>
+        <a class="nav-item" data-view="orders" id="nav-orders">
+          <span class="nav-icon">📦</span>
+          <span>SMS Orders</span>
+          <span class="nav-badge" id="badge-order-count">0</span>
+        </a>
+
+        <div class="nav-section-title">AI & Intelligence</div>
+        <a class="nav-item" data-view="ai-monitoring" id="nav-ai-monitoring">
+          <span class="nav-icon">🤖</span>
+          <span>AI Monitoring</span>
+        </a>
+        <a class="nav-item" data-view="knowledge-base" id="nav-knowledge-base">
+          <span class="nav-icon">📚</span>
+          <span>Knowledge Base</span>
+        </a>
+        <a class="nav-item" data-view="store-policies" id="nav-store-policies">
+          <span class="nav-icon">📜</span>
+          <span>Store Policies</span>
+        </a>
+
+        <div class="nav-section-title">Management</div>
+        <a class="nav-item" data-view="analytics" id="nav-analytics">
+          <span class="nav-icon">📈</span>
+          <span>Analytics</span>
+        </a>
+        <a class="nav-item admin-only" data-view="agents" id="nav-agents" style="display: none;">
+          <span class="nav-icon">👥</span>
+          <span>Team & Agents</span>
+        </a>
+        <a class="nav-item admin-only" data-view="settings" id="nav-settings" style="display: none;">
+          <span class="nav-icon">⚙️</span>
+          <span>System Settings</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-profile-badge">
+          <div class="user-avatar" id="user-avatar">A</div>
+          <div class="user-details">
+            <div class="user-name" id="user-display-name">Administrator</div>
+            <div class="user-role" id="user-display-role">Admin</div>
+          </div>
+          <button id="logout-btn" class="btn btn-secondary btn-sm" title="Sign Out">🚪</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Wrapper -->
+    <div class="main-wrapper">
+      
+      <!-- Top Navigation Bar -->
+      <header class="top-navbar">
+        <div class="top-nav-left">
+          <button id="menu-toggle" class="menu-toggle-btn">☰</button>
+          <div class="top-breadcrumb" id="top-breadcrumb">Overview Dashboard</div>
+        </div>
+        <div class="top-nav-right">
+          <div class="store-pill" title="Shopify Primary Store">abihacart.myshopify.com • UAE (AED)</div>
+          <button id="refresh-view-btn" class="btn btn-secondary btn-sm">🔄 Refresh</button>
+        </div>
+      </header>
+
+      <!-- Main Content Area -->
+      <main class="main-content">
+
+        <!-- ===================================================================
+             VIEW 1: Overview Dashboard
+             =================================================================== -->
+        <section id="view-overview" class="content-view">
+          <div class="dashboard-grid">
+            <div class="metric-card">
+              <div class="metric-header">
+                <span class="metric-label">Total Conversations</span>
+                <div class="metric-icon-wrap" style="background: #eff6ff; color: #2563eb;">💬</div>
+              </div>
+              <div class="metric-value" id="stat-total-conversations">0</div>
+              <div class="metric-footer">Storefront customer chats</div>
+            </div>
+
+            <div class="metric-card">
+              <div class="metric-header">
+                <span class="metric-label">Open Support Tickets</span>
+                <div class="metric-icon-wrap" style="background: #fffbeb; color: #f59e0b;">📱</div>
+              </div>
+              <div class="metric-value" id="stat-open-tickets">0</div>
+              <div class="metric-footer">Requires agent review</div>
+            </div>
+
+            <div class="metric-card">
+              <div class="metric-header">
+                <span class="metric-label">Pending Human Replies</span>
+                <div class="metric-icon-wrap" style="background: #fef2f2; color: #ef4444;">⏳</div>
+              </div>
+              <div class="metric-value" id="stat-pending-replies">0</div>
+              <div class="metric-footer">Awaiting WhatsApp reply</div>
+            </div>
+
+            <div class="metric-card">
+              <div class="metric-header">
+                <span class="metric-label">Resolved Tickets</span>
+                <div class="metric-icon-wrap" style="background: #ecfdf5; color: #10b981;">✅</div>
+              </div>
+              <div class="metric-value" id="stat-resolved-tickets">0</div>
+              <div class="metric-footer">Successfully handled</div>
+            </div>
+
+            <div class="metric-card">
+              <div class="metric-header">
+                <span class="metric-label">AI Handled</span>
+                <div class="metric-icon-wrap" style="background: #f5f3ff; color: #8b5cf6;">🤖</div>
+              </div>
+              <div class="metric-value" id="stat-ai-handled">0</div>
+              <div class="metric-footer">Autonomous GPT-6 Luna</div>
+            </div>
+
+            <div class="metric-card">
+              <div class="metric-header">
+                <span class="metric-label">Avg Response Time</span>
+                <div class="metric-icon-wrap" style="background: #f1f5f9; color: #475569;">⏱️</div>
+              </div>
+              <div class="metric-value" id="stat-avg-response">0m</div>
+              <div class="metric-footer">Customer to agent reply</div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem;">
+            <!-- Recent Conversations -->
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Recent Storefront Conversations</h3>
+                <button class="btn btn-secondary btn-sm" onclick="AdminApp.switchView('conversations')">View All</button>
+              </div>
+              <div class="card-body" style="padding: 0;">
+                <div class="table-responsive">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>Conversation ID</th>
+                        <th>Status</th>
+                        <th>Messages</th>
+                        <th>Last Activity</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody id="overview-recent-convs">
+                      <tr><td colspan="5" style="text-align: center; color: #64748b;">Loading recent chats...</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Recent WhatsApp Activity -->
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Recent WhatsApp Support Tickets</h3>
+                <button class="btn btn-secondary btn-sm" onclick="AdminApp.switchView('tickets')">View All</button>
+              </div>
+              <div class="card-body" style="padding: 0;">
+                <div class="table-responsive">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>Ticket ID</th>
+                        <th>Customer</th>
+                        <th>Status</th>
+                        <th>24h Window</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody id="overview-recent-tickets">
+                      <tr><td colspan="5" style="text-align: center; color: #64748b;">Loading recent tickets...</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             VIEW 2: Customer Conversations Management
+             =================================================================== -->
+        <section id="view-conversations" class="content-view" style="display: none;">
+          <div class="toolbar">
+            <div class="toolbar-left">
+              <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="conv-search-input" class="form-input" placeholder="Search conversations...">
+              </div>
+              <select id="conv-status-filter" class="form-select" style="width: 140px;">
+                <option value="">All Statuses</option>
+                <option value="active">Active</option>
+                <option value="escalated">Escalated</option>
+                <option value="closed">Closed</option>
+              </select>
+            </div>
+            <div class="toolbar-right">
+              <button id="conv-filter-btn" class="btn btn-secondary btn-sm">Filter</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-body" style="padding: 0;">
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Conversation ID</th>
+                      <th>Customer</th>
+                      <th>Status</th>
+                      <th>Messages Count</th>
+                      <th>Created</th>
+                      <th>Last Updated</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="conversations-table-body">
+                    <tr><td colspan="7" style="text-align: center; color: #64748b;">Loading conversations...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             VIEW 3: WhatsApp Support Tickets
+             =================================================================== -->
+        <section id="view-tickets" class="content-view" style="display: none;">
+          <div class="toolbar">
+            <div class="toolbar-left">
+              <select id="ticket-status-filter" class="form-select" style="width: 160px;">
+                <option value="">All Tickets</option>
+                <option value="pending_agent">Pending Agent</option>
+                <option value="open">Open</option>
+                <option value="agent_replied">Agent Replied</option>
+                <option value="resolved">Resolved</option>
+                <option value="closed">Closed</option>
+              </select>
+            </div>
+            <div class="toolbar-right">
+              <button id="ticket-refresh-btn" class="btn btn-secondary btn-sm">Refresh Tickets</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-body" style="padding: 0;">
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Ticket ID</th>
+                      <th>Customer Phone (Masked)</th>
+                      <th>Customer Name</th>
+                      <th>Status</th>
+                      <th>Assigned To</th>
+                      <th>24h Meta Window</th>
+                      <th>Last Customer Message</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tickets-table-body">
+                    <tr><td colspan="8" style="text-align: center; color: #64748b;">Loading support tickets...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             VIEW: Customer SMS Orders Management
+             =================================================================== -->
+        <section id="view-orders" class="content-view" style="display: none;">
+          <div class="toolbar">
+            <div class="toolbar-left">
+              <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="order-search-input" class="form-input" placeholder="Search by order ref, customer...">
+              </div>
+              <select id="order-status-filter" class="form-select" style="width: 170px;">
+                <option value="">All Orders</option>
+                <option value="pending_confirmation">Pending Confirmation</option>
+                <option value="confirmed">Confirmed</option>
+                <option value="expired">Expired</option>
+                <option value="failed">Failed Delivery</option>
+              </select>
+            </div>
+            <div class="toolbar-right">
+              <button id="order-refresh-btn" class="btn btn-secondary btn-sm">Refresh Orders</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-body" style="padding: 0;">
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Order Reference</th>
+                      <th>Customer</th>
+                      <th>Mobile (SMS)</th>
+                      <th>Product & Qty</th>
+                      <th>Total (AED)</th>
+                      <th>SMS Status</th>
+                      <th>Confirmation Status</th>
+                      <th>Shopify Order</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="orders-table-body">
+                    <tr><td colspan="9" style="text-align: center; color: #64748b;">Loading SMS orders...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             VIEW 4: AI Conversation Monitoring
+             =================================================================== -->
+        <section id="view-ai-monitoring" class="content-view" style="display: none;">
+          <div class="dashboard-grid">
+            <div class="metric-card">
+              <div class="metric-header"><span class="metric-label">Active AI Model</span></div>
+              <div class="metric-value" style="font-size: 1.25rem;" id="ai-model-tag">gpt-6-luna</div>
+              <div class="metric-footer">Official OpenAI Responses API (/v1/responses)</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-header"><span class="metric-label">Total AI Requests</span></div>
+              <div class="metric-value" id="ai-total-requests">0</div>
+              <div class="metric-footer">Autonomous inquiries</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-header"><span class="metric-label">AI Success Rate</span></div>
+              <div class="metric-value" id="ai-success-rate">100%</div>
+              <div class="metric-footer">Execution without errors</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-header"><span class="metric-label">Human Escalations</span></div>
+              <div class="metric-value" id="ai-escalation-count">0</div>
+              <div class="metric-footer">Transferred to WhatsApp queue</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Shopify & Policy Tool Call Execution Frequency</h3>
+            </div>
+            <div class="card-body">
+              <div id="ai-tool-executions-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                <!-- Filled dynamically -->
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Recent AI Telemetry & Function Calling Activity</h3>
+            </div>
+            <div class="card-body" style="padding: 0;">
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Timestamp</th>
+                      <th>Customer Message</th>
+                      <th>Model Identifier</th>
+                      <th>Tool Calls Count</th>
+                      <th>Latency</th>
+                      <th>Escalated</th>
+                    </tr>
+                  </thead>
+                  <tbody id="ai-activity-table-body">
+                    <tr><td colspan="6" style="text-align: center; color: #64748b;">Loading telemetry...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             VIEW 5: Knowledge Base Management
+             =================================================================== -->
+        <section id="view-knowledge-base" class="content-view" style="display: none;">
+          <div class="toolbar">
+            <div class="toolbar-left">
+              <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="kb-search-input" class="form-input" placeholder="Search knowledge base...">
+              </div>
+              <select id="kb-category-filter" class="form-select" style="width: 140px;">
+                <option value="">All Categories</option>
+                <option value="shipping">Shipping</option>
+                <option value="returns">Returns</option>
+                <option value="payments">Payments</option>
+                <option value="faq">FAQ</option>
+                <option value="store_info">Store Info</option>
+                <option value="support">Support</option>
+              </select>
+            </div>
+            <div class="toolbar-right">
+              <button id="add-kb-entry-btn" class="btn btn-primary btn-sm">➕ Add Knowledge Entry</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-body" style="padding: 0;">
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Key / Identifier</th>
+                      <th>Title</th>
+                      <th>Category</th>
+                      <th>Approval Status</th>
+                      <th>Content Snippet</th>
+                      <th>Last Updated</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="kb-table-body">
+                    <tr><td colspan="7" style="text-align: center; color: #64748b;">Loading knowledge entries...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             VIEW 6: Store Policies Management
+             =================================================================== -->
+        <section id="view-store-policies" class="content-view" style="display: none;">
+          <div style="background-color: #fffbeb; border: 1px solid #fde68a; border-radius: var(--radius-md); padding: 1rem; margin-bottom: 1.5rem;">
+            <strong style="color: #92400e;">⚠️ Knowledge Governance Notice:</strong>
+            <p style="color: #78350f; font-size: 0.875rem; margin-top: 0.25rem;">
+              Store policies marked as <strong>Pending Approval</strong> are treated as internal working guidelines and are prefixed with an explicit disclaimer. They can only be presented as confirmed official store facts after explicit <strong>Admin Publication</strong>.
+            </p>
+          </div>
+
+          <div id="policies-list-container" style="display: flex; flex-direction: column; gap: 1.25rem;">
+            <!-- Filled dynamically -->
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             VIEW 7: Support Analytics
+             =================================================================== -->
+        <section id="view-analytics" class="content-view" style="display: none;">
+          <div class="dashboard-grid">
+            <div class="metric-card">
+              <div class="metric-header"><span class="metric-label">Escalation Rate</span></div>
+              <div class="metric-value" id="analytics-escalation-rate">0%</div>
+              <div class="metric-footer">Chats escalated to human</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-header"><span class="metric-label">Open vs Resolved Ratio</span></div>
+              <div class="metric-value" id="analytics-open-resolved-ratio">0:0</div>
+              <div class="metric-footer">Open vs closed tickets</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-header"><span class="metric-label">AI vs Human Volume</span></div>
+              <div class="metric-value" id="analytics-ai-human-volume">0 / 0</div>
+              <div class="metric-footer">Conversations handled</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Customer Conversations Over Time (Last 7 Days)</h3>
+            </div>
+            <div class="card-body">
+              <div class="chart-container" id="daily-volume-chart-container">
+                <!-- SVG Chart rendered dynamically -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             VIEW 8: Team & Agent Management (Admin Only)
+             =================================================================== -->
+        <section id="view-agents" class="content-view" style="display: none;">
+          <div class="toolbar">
+            <div class="toolbar-left">
+              <h3 style="font-size: 1rem; font-weight: 700;">Support Team Roster</h3>
+            </div>
+            <div class="toolbar-right">
+              <button id="add-agent-btn" class="btn btn-primary btn-sm">➕ Add Support Agent</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-body" style="padding: 0;">
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Agent ID</th>
+                      <th>Username</th>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Role</th>
+                      <th>Status</th>
+                      <th>Created</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="agents-table-body">
+                    <tr><td colspan="8" style="text-align: center; color: #64748b;">Loading agents...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             VIEW 9: System Settings (Admin Only)
+             =================================================================== -->
+        <section id="view-settings" class="content-view" style="display: none;">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Abihacart Support Infrastructure Overview</h3>
+            </div>
+            <div class="card-body">
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem;">
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem;">
+                  <strong style="display: block; font-size: 0.8125rem; color: #64748b; margin-bottom: 0.25rem;">SHOPIFY STORE</strong>
+                  <div style="font-weight: 700;">abihacart.myshopify.com</div>
+                  <div style="font-size: 0.75rem; color: #10b981; margin-top: 0.25rem;">● GraphQL Admin API (2026-10) • Read-Only Mode</div>
+                </div>
+
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem;">
+                  <strong style="display: block; font-size: 0.8125rem; color: #64748b; margin-bottom: 0.25rem;">AI ENGINE</strong>
+                  <div style="font-weight: 700;">OpenAI Responses API</div>
+                  <div style="font-size: 0.75rem; color: #2563eb; margin-top: 0.25rem;">● Model: gpt-6-luna (/v1/responses)</div>
+                </div>
+
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem;">
+                  <strong style="display: block; font-size: 0.8125rem; color: #64748b; margin-bottom: 0.25rem;">META WHATSAPP CLOUD API</strong>
+                  <div style="font-weight: 700;">Graph API v26.0</div>
+                  <div style="font-size: 0.75rem; color: #8b5cf6; margin-top: 0.25rem;">● 24h Customer Service Window Enforced</div>
+                </div>
+
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem;">
+                  <strong style="display: block; font-size: 0.8125rem; color: #64748b; margin-bottom: 0.25rem;">DATABASE PERSISTENCE</strong>
+                  <div style="font-weight: 700;">MongoDB & Mongoose</div>
+                  <div style="font-size: 0.75rem; color: #10b981; margin-top: 0.25rem;" id="settings-db-status">● Hybrid Store Active</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       Modals Container
+       ========================================================================= -->
+  <div id="modal-container"></div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Dynamic Backend URL Configuration for Standalone or Vercel Hosting -->
+  <script>
+    window.ABIHACART_CONFIG = window.ABIHACART_CONFIG || {
+      backendUrl: window.ABIHACART_BACKEND_URL || (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://localhost:5000' : '')
+    };
+  </script>
+
+  <!-- Scripts -->
+  <script src="js/admin.js"></script>
+</body>
+</html>
