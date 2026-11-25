@@ -284,6 +284,9 @@
     </div>
   </main>
 
+  <!-- Centralized Configuration -->
+  <script src="/assets/config.js"></script>
+
   <!-- Embed Script for Abihacart Order Confirmation Popup -->
   <script src="/assets/abihacart-order-popup.js"></script>
   <script>
@@ -306,10 +309,14 @@
 
     function launchOrderPopup() {
       if (window.AbihacartOrderPopup && window.AbihacartOrderPopup.open) {
+        const getBackend = () => (window.ABIHACART_CONFIG && window.ABIHACART_CONFIG.backendUrl) ||
+          (typeof window.getAbihacartBackendUrl === 'function' ? window.getAbihacartBackendUrl() : 'https://abihacart-chatbot-backend.onrender.com');
+
         window.AbihacartOrderPopup.open(visualReferenceOrder, {
           onConfirm: async () => {
             try {
-              const res = await fetch('http://localhost:10000/api/orders/confirm-shopify-order', {
+              const backendUrl = getBackend();
+              const res = await fetch(`${backendUrl}/api/orders/confirm-shopify-order`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ orderId: visualReferenceOrder.shopifyOrderId }),
@@ -320,7 +327,8 @@
           },
           onCancel: async () => {
             try {
-              const res = await fetch('http://localhost:10000/api/orders/cancel-shopify-order', {
+              const backendUrl = getBackend();
+              const res = await fetch(`${backendUrl}/api/orders/cancel-shopify-order`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

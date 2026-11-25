@@ -18,7 +18,7 @@
   const rawUrl = (window.ABIHACART_CONFIG && window.ABIHACART_CONFIG.backendUrl) ||
     window.ABIHACART_BACKEND_URL ||
     (typeof localStorage !== 'undefined' && localStorage.getItem('abh_backend_url')) ||
-    (isLocalhostHost ? 'http://localhost:5000' : '');
+    (isLocalhostHost ? 'http://localhost:10000' : 'https://abihacart-chatbot-backend.onrender.com');
   const DEFAULT_BACKEND_URL = String(rawUrl).trim().replace(/\/+$/, '');
 
   const SHOP_DOMAIN = (window.ABIHACART_CONFIG && window.ABIHACART_CONFIG.shop) ||
